@@ -6,8 +6,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
     public event Action<eStateGame> StateChangedAction = delegate { };
-
+    public GameData GameDatas;
     public enum eLevelMode
     {
         TIMER,
@@ -47,6 +48,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
         State = eStateGame.SETUP;
 
         m_gameSettings = Resources.Load<GameSettings>(Constants.GAME_SETTINGS_PATH);
@@ -71,7 +73,7 @@ public class GameManager : MonoBehaviour
     {
         State = state;
 
-        if(State == eStateGame.PAUSE)
+        if (State == eStateGame.PAUSE)
         {
             DOTween.PauseAll();
         }
@@ -135,5 +137,16 @@ public class GameManager : MonoBehaviour
             Destroy(m_levelCondition);
             m_levelCondition = null;
         }
+    }
+    public GameObject FindObjByKeyFromDataGame(string key)
+    {
+        foreach (DataGame dataGame in GameDatas.dataGames)
+        {
+            if (dataGame.key.Equals(key))
+            {
+                return dataGame.value;
+            }
+        }
+        return null;
     }
 }

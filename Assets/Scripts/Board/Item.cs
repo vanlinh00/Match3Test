@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using static NormalItem;
 
 [Serializable]
 public class Item
@@ -18,7 +19,7 @@ public class Item
 
         if (!string.IsNullOrEmpty(prefabname))
         {
-            GameObject prefab = Resources.Load<GameObject>(prefabname);
+            GameObject prefab = /*Resources.Load<GameObject>(prefabname);*/ GameManager.instance.FindObjByKeyFromDataGame(prefabname);
             if (prefab)
             {
                 View = GameObject.Instantiate(prefab).transform;
@@ -93,6 +94,12 @@ public class Item
     {
         return false;
     }
+
+    internal virtual bool IsSameTypeByTypeItem(eNormalType eNormalType)
+    {
+        return false;
+    }
+
 
     internal virtual void ExplodeView()
     {
