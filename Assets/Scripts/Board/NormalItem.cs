@@ -59,4 +59,8 @@ public class NormalItem : Item
 
         return it != null && it.ItemType == this.ItemType;
     }
+    internal override bool IsSameTypeByTypeItem(eNormalType eNormalType)
+    {
+        return eNormalType == this.ItemType;
+    }
 }

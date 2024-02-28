@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static NormalItem;
 
 public class Board
 {
@@ -24,6 +25,9 @@ public class Board
     private Transform m_root;
 
     private int m_matchMin;
+
+    private int[] countCell = new int[7];
+    private List<int> listNormalTypeDif=new List<int>();
 
     public Board(Transform transform, GameSettings gameSettings)
     {
@@ -147,12 +151,52 @@ public class Board
 
                 NormalItem item = new NormalItem();
 
-                item.SetType(Utils.GetRandomNormalType());
+                item.SetType(GetNormalType(cell)/*Utils.GetRandomNormalType()*/);
                 item.SetView();
                 item.SetViewRoot(m_root);
 
                 cell.Assign(item);
                 cell.ApplyItemPosition(true);
+            }
+        }
+    }
+    public eNormalType GetNormalType(Cell cell)
+    {
+        listNormalTypeDif.Clear();
+        foreach (eNormalType type in Enum.GetValues(typeof(eNormalType)))
+        {
+            bool checkCell = cell.IsSameType4neighbors(type);
+            if (!checkCell)
+            {
+                listNormalTypeDif.Add((int)type);
+            }
+        }
+        return  (eNormalType)GetIndexNormalTypeMin();
+    }
+
+    public int GetIndexNormalTypeMin()
+    {
+        Array.Clear(countCell, 0, countCell.Length);
+        int MinNormalType = listNormalTypeDif[0];
+        for (int i = 0; i < countCell.Length; i++)
+        {
+            if (MinNormalType < countCell[i]&&listNormalTypeDif.Contains(i))
+            {
+                MinNormalType = listNormalTypeDif[i];
+            }
+        }
+        return MinNormalType;
+    }
+    public void GetAllListItem()
+    {
+        for (int x = 0; x < boardSizeX; x++)
+        {
+            for (int y = 0; y < boardSizeY; y++)
+            {
+                Cell cell = m_cells[x, y];
+                NormalItem normalItem = (NormalItem)cell.Item;
+                if (normalItem != null)
+                    countCell[(int)normalItem.ItemType]++;
             }
         }
     }
@@ -350,7 +394,7 @@ public class Board
         var dir = GetMatchDirection(matches);
 
         var bonus = matches.Where(x => x.Item is BonusItem).FirstOrDefault();
-        if(bonus == null)
+        if (bonus == null)
         {
             return matches;
         }

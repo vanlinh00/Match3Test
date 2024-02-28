@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using static NormalItem;
 
 public class Cell : MonoBehaviour
 {
@@ -67,7 +68,15 @@ public class Cell : MonoBehaviour
     {
         return Item != null && other.Item != null && Item.IsSameType(other.Item);
     }
+    public bool IsSameType4neighbors(eNormalType eNormalType)
+    {
+        bool IsSame = (NeighbourUp != null && NeighbourUp.Item != null && NeighbourUp.Item.IsSameTypeByTypeItem(eNormalType))
+                 || (NeighbourBottom != null && NeighbourBottom.Item != null && NeighbourBottom.Item.IsSameTypeByTypeItem(eNormalType))
+                 || (NeighbourLeft != null && NeighbourLeft.Item != null && NeighbourLeft.Item.IsSameTypeByTypeItem(eNormalType))
+                 || (NeighbourRight != null && NeighbourRight.Item != null && NeighbourRight.Item.IsSameTypeByTypeItem(eNormalType));
 
+        return IsSame;
+    }
     internal void ExplodeItem()
     {
         if (Item == null) return;
