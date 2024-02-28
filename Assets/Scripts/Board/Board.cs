@@ -21,6 +21,7 @@ public class Board
     private int boardSizeY;
 
     private Cell[,] m_cells;
+    private eNormalType[,] m_typeCell;
 
     private Transform m_root;
 
@@ -39,7 +40,7 @@ public class Board
         this.boardSizeY = gameSettings.BoardSizeY;
 
         m_cells = new Cell[boardSizeX, boardSizeY];
-
+        m_typeCell = new eNormalType[boardSizeX, boardSizeY];
         CreateBoard();
     }
 
@@ -103,8 +104,17 @@ public class Board
                         types.Add(nitem.ItemType);
                     }
                 }
+                if(GameManager.instance.State== GameManager.eStateGame.Game_RESART)
+                {
+                    item.SetType(m_typeCell[x, y]);
+                }
+                else
+                {
+                    item.SetType(Utils.GetRandomNormalTypeExcept(types.ToArray()));
+                }
 
-                item.SetType(Utils.GetRandomNormalTypeExcept(types.ToArray()));
+                NormalItem normalItem = (NormalItem)item;
+                m_typeCell[x,y] = normalItem.ItemType;
                 item.SetView();
                 item.SetViewRoot(m_root);
 
@@ -113,7 +123,7 @@ public class Board
             }
         }
     }
-
+   
     internal void Shuffle()
     {
         List<Item> list = new List<Item>();

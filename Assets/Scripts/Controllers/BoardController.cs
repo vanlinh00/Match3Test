@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class BoardController : MonoBehaviour
 {
+    public static BoardController Instance;
     public event Action OnMoveEvent = delegate { };
 
     public bool IsBusy { get; private set; }
@@ -30,6 +31,10 @@ public class BoardController : MonoBehaviour
     private bool m_hintIsShown;
 
     private bool m_gameOver;
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     public void StartGame(GameManager gameManager, GameSettings gameSettings)
     {
@@ -194,8 +199,8 @@ public class BoardController : MonoBehaviour
             }
             else
             {
-                //StartCoroutine(RefillBoardCoroutine());
-                StartCoroutine(ShuffleBoardCoroutine());
+                StartCoroutine(RefillBoardCoroutine());
+                //  StartCoroutine(ShuffleBoardCoroutine());
             }
         }
     }
@@ -224,7 +229,7 @@ public class BoardController : MonoBehaviour
             matches[i].ExplodeItem();
         }
 
-        if(matches.Count > m_gameSettings.MatchesMin)
+        if (matches.Count > m_gameSettings.MatchesMin)
         {
             m_board.ConvertNormalToBonus(matches, cellEnd);
         }
@@ -245,7 +250,7 @@ public class BoardController : MonoBehaviour
         FindMatchesAndCollapse();
     }
 
-    private IEnumerator RefillBoardCoroutine()
+    public IEnumerator RefillBoardCoroutine()
     {
         m_board.ExplodeAllItems();
 
@@ -256,6 +261,7 @@ public class BoardController : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
 
         FindMatchesAndCollapse();
+        GameManager.instance.SetState(GameManager.eStateGame.GAME_STARTED);
     }
 
     private IEnumerator ShuffleBoardCoroutine()

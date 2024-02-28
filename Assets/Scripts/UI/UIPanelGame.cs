@@ -9,17 +9,24 @@ public class UIPanelGame : MonoBehaviour,IMenu
     public Text LevelConditionView;
 
     [SerializeField] private Button btnPause;
+    [SerializeField] private Button btnResart;
 
     private UIMainManager m_mngr;
 
     private void Awake()
     {
         btnPause.onClick.AddListener(OnClickPause);
+        btnResart.onClick.AddListener(OnClickResart);
     }
 
     private void OnClickPause()
     {
         m_mngr.ShowPauseMenu();
+    }
+    private void OnClickResart()
+    {
+        GameManager.instance.SetState(GameManager.eStateGame.Game_RESART);
+        StartCoroutine(BoardController.Instance.RefillBoardCoroutine());
     }
 
     public void Setup(UIMainManager mngr)
