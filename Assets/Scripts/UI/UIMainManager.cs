@@ -107,10 +107,12 @@ public class UIMainManager : MonoBehaviour
     internal void LoadLevelMoves()
     {
         m_gameManager.LoadLevel(GameManager.eLevelMode.MOVES);
+        GameManager.instance.CurrentLevelMode = GameManager.eLevelMode.MOVES;
     }
 
     internal void LoadLevelTimer()
     {
+        GameManager.instance.CurrentLevelMode = GameManager.eLevelMode.TIMER;
         m_gameManager.LoadLevel(GameManager.eLevelMode.TIMER);
     }
 

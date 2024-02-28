@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIPanelGame : MonoBehaviour,IMenu
+public class UIPanelGame : MonoBehaviour, IMenu
 {
     public Text LevelConditionView;
 
@@ -26,7 +26,9 @@ public class UIPanelGame : MonoBehaviour,IMenu
     private void OnClickResart()
     {
         GameManager.instance.SetState(GameManager.eStateGame.Game_RESART);
+        GameManager.instance.ResartLevel(GameManager.instance.CurrentLevelMode);
         StartCoroutine(BoardController.Instance.RefillBoardCoroutine());
+
     }
 
     public void Setup(UIMainManager mngr)

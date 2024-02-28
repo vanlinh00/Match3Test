@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
             StateChangedAction(m_state);
         }
     }
-
+    public eLevelMode CurrentLevelMode;
 
     private GameSettings m_gameSettings;
 
@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void LoadLevel(eLevelMode mode)
-    {
+    { 
         m_boardController = new GameObject("BoardController").AddComponent<BoardController>();
         m_boardController.StartGame(this, m_gameSettings);
 
@@ -148,5 +148,16 @@ public class GameManager : MonoBehaviour
             }
         }
         return null;
+    }
+    public void ResartLevel(eLevelMode mode)
+    {
+        if (mode == eLevelMode.MOVES)
+        {
+            m_levelCondition.Setup(m_gameSettings.LevelMoves, m_uiMenu.GetLevelConditionView(), m_boardController);
+        }
+        else if (mode == eLevelMode.TIMER)
+        {
+            m_levelCondition.Setup(m_gameSettings.LevelMoves, m_uiMenu.GetLevelConditionView(), this);
+        }
     }
 }
